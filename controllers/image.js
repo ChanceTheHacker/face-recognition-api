@@ -1,29 +1,30 @@
-const clarifai = require('clarifai');
+const clarifai = require("clarifai");
+import apiKey from "../private/apikey";
 
-const app = new Clarifai.App({
- apiKey: 'a6342b3f30084baab641c556cf3584a3'
-});
+const app = new Clarifai.App(apiKey);
 
 const handleApiCall = (req, res) => {
-	app.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
-		.then(data => {
-			res.json(data);
-		})
-		.catch(err => res.status(400).json('unable to contact API'))
-}
+  app.models
+    .predict(Clarifai.FACE_DETECT_MODEL, req.body.input)
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => res.status(400).json("unable to contact API"));
+};
 
 const handleImage = (req, res, db) => {
-	const { id } = req.body;
-	db('users').where('id', '=', id)
-	.increment('entries', 1)
-	.returning('entries')
-	.then(entries => {
-		res.json(entries[0]);
-	})
-	.catch(err => res.status(400).json('unable to get entries'))
-}
+  const { id } = req.body;
+  db("users")
+    .where("id", "=", id)
+    .increment("entries", 1)
+    .returning("entries")
+    .then(entries => {
+      res.json(entries[0]);
+    })
+    .catch(err => res.status(400).json("unable to get entries"));
+};
 
 module.exports = {
- handleImage,
- handleApiCall
-}
+  handleImage,
+  handleApiCall
+};
